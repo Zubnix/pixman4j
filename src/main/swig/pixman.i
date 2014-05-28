@@ -13,10 +13,10 @@
 SWIG_JAVABODY_PROXY(public, public, SWIGTYPE);
 SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE);
 
-
 //own lib
 %include "niobuffers_java.i";
 %include "equals_hash_java.i";
+%include "primitives_pixman.i";
 
 %{
 #include <pixman.h>
