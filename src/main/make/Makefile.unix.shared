@@ -1,0 +1,31 @@
+SHELL = /bin/sh
+CC = cc
+TARGETDIR = ../resources
+$(shell mkdir -p $(TARGETDIR))
+
+#if java home is not set (debian) find java home by searching for javac.
+JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:/bin/javac::")
+JNI_HOME ?= $(JAVA_HOME)
+
+#The LIBNAME_ARCH and MARCH variable should be set by the makefile that includes this makefile.
+LIBNAME = libpixman4j_$(LIBNAME_ARCH).so
+
+vpath %.c $(LIBSRCDIR)
+JAVA_INCLUDE_DIR = $(JNI_HOME)/include
+JNI = $(JAVA_INCLUDE_DIR)
+JNI_LINUX = $(JAVA_INCLUDE_DIR)/linux
+JNI_SOURCE_DIR = ../../../target/generated-sources/swig/org/pixman
+
+CFLAGS = -march=$(MARCH) -O2 -fno-strict-aliasing -fPIC -c -g -Wall -I$(JNI) -I$(JNI_LINUX) -fno-stack-protector -I/usr/include/pixman-1
+LFLAGS = -lpixman-1
+
+objects = pixmanJNI.o
+
+all : $(objects)
+	$(CC) -shared -Wl,-soname,$(LIBNAME) -o $(TARGETDIR)/$(LIBNAME) $(objects) $(LFLAGS)
+
+pixmanJNI.o : $(JNI_SOURCE_DIR)/pixmanJNI.c
+	$(CC) $(CFLAGS) $< -o $@
+	
+clean:
+	rm -rf *.o
