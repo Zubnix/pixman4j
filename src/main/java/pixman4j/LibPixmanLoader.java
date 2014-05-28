@@ -1,4 +1,4 @@
-package xcb4j;
+package pixman4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,20 +6,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class LibXcbLoader {
+public class LibPixmanLoader {
 
-	private static final String LIBXCB_BASE_NAME = "libxcb4j";
+	private static final String LIBPIXMAN_BASE_NAME = "libpixman4j";
 
 	public static void load() {
 		final String jreArch = System.getProperty("os.arch");
-		final String libName = LibXcbLoader.LIBXCB_BASE_NAME + "_" + jreArch + ".so";
+		final String libName = LibPixmanLoader.LIBPIXMAN_BASE_NAME + "_" + jreArch + ".so";
 
-		InputStream in = LibXcbLoader.class.getClassLoader().getResourceAsStream(libName);
-		byte[] buffer = new byte[4096];
+		final InputStream in = LibPixmanLoader.class.getClassLoader().getResourceAsStream(libName);
+		final byte[] buffer = new byte[4096];
 		int read = -1;
-		File temp = new File(	new File(System.getProperty("java.io.tmpdir")),
+		final File temp = new File(	new File(System.getProperty("java.io.tmpdir")),
 								libName);
-		FileOutputStream fos;
+		final FileOutputStream fos;
 		try {
 			fos = new FileOutputStream(temp);
 			while ((read = in.read(buffer)) != -1) {
@@ -31,9 +31,9 @@ public class LibXcbLoader {
 			in.close();
 
 			System.load(temp.getAbsolutePath());
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			throw new Error(e);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new Error(e);
 		}
 	}
